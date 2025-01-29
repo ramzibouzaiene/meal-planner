@@ -1,22 +1,19 @@
-# Recipe Finder and Meal Planner
+# Meal Planner
 
 ## Overview
-Recipe Finder and Meal Planner is a full-stack web application that allows users to search for recipes, plan their meals, and manage their dietary preferences efficiently.
+Meal Planner is a full-stack web application that allows users to search for recipes, plan their meals, and manage their dietary preferences efficiently.
 
 ## Features
 - 🔍 **Search Recipes**: Find recipes based on ingredients, cuisine, and dietary restrictions.
 - 📅 **Meal Planning**: Add recipes to meal plans for different days of the week.
 - ✅ **Authentication**: Secure login and registration system.
 - 🔒 **Protected Routes**: Certain features require authentication.
-- 🛒 **Shopping List**: Automatically generate shopping lists from meal plans.
-- 📊 **Nutrition Insights**: Get detailed nutritional information for each recipe.
 
 ## Tech Stack
 ### Frontend:
 - **React (TypeScript)** – Component-based UI development
 - **React Router** – Navigation and protected routes
-- **Tailwind CSS** – Styling and responsive design
-- **Context API / Redux** – State management
+- **CSS** – Styling and responsive design
 
 ### Backend:
 - **Node.js & Express** – Server-side logic
@@ -40,19 +37,18 @@ cd recipe-finder-meal-planner
 #### Install dependencies
 ##### Backend
 ```sh
-cd backend
+cd Back
 npm install
 ```
 ##### Frontend
 ```sh
-cd ../frontend
+cd ../Front
 npm install
 ```
 
 #### Environment Variables
 Create a `.env` file in the `backend` folder and add:
 ```env
-PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 ```
@@ -60,11 +56,11 @@ JWT_SECRET=your_jwt_secret
 #### Start the application
 ##### Backend
 ```sh
-npm run dev
+npm start
 ```
 ##### Frontend
 ```sh
-npm start
+npm run dev
 ```
 
 ## API Endpoints
@@ -72,9 +68,11 @@ npm start
 - `POST /api/auth/login` - User login
 - `POST /api/auth/register` - User registration
 
-### Recipes
-- `GET /api/recipes` - Get all recipes
-- `GET /api/recipes/:id` - Get recipe by ID
+### Favorites
+- `POST /api/favorites` - Create a favorite meal
+- `GET /api/favorites` - Get all favorites
+- `PUT /api/favorites/:id` - Update favorite
+- `DELETE /api/favorites/:id` - Delete favorite
 
 ### Meal Plans
 - `POST /api/mealPlans` - Create a meal plan
@@ -94,9 +92,4 @@ Some routes require authentication using JWT tokens. The frontend handles this w
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact
-For any inquiries, feel free to reach out:
-- Email: your.email@example.com
-- GitHub: [yourusername](https://github.com/yourusername)
 
