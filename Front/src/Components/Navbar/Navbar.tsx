@@ -1,6 +1,6 @@
 import { FileTextFilled, StarFilled, HomeFilled } from '@ant-design/icons'
-import type { MenuProps, MenuTheme } from 'antd'
-import { Menu, Switch } from 'antd'
+import type { MenuProps } from 'antd'
+import { Menu } from 'antd'
 import { useState } from 'react'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -38,12 +38,7 @@ const items: MenuItem[] = [
   },
 ]
 const Navbar = () => {
-  const [theme, setTheme] = useState<MenuTheme>('dark')
   const [current, setCurrent] = useState('')
-
-  const changeTheme = (value: boolean) => {
-    setTheme(value ? 'dark' : 'light')
-  }
 
   const onClick: MenuProps['onClick'] = (e) => {
     console.log('click ', e)
@@ -51,14 +46,8 @@ const Navbar = () => {
   }
   return (
     <>
-      <Switch
-        checked={theme === 'dark'}
-        onChange={changeTheme}
-        checkedChildren="Dark"
-        unCheckedChildren="Light"
-      />
       <Menu
-        theme={theme}
+        theme="dark"
         onClick={onClick}
         style={{ width: 256, height: '98vh' }}
         selectedKeys={[current]}

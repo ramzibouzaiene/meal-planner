@@ -72,8 +72,8 @@ export const Favorites = () => {
 
       if (response?.message) {
         message.success('Favorite added successfully.')
-        fetchFavorites() // Refresh favorites after adding
-        clodeModal() // Close modal after submission
+        fetchFavorites()
+        clodeModal()
       } else {
         message.error('An error occurred while submitting the form.')
       }
