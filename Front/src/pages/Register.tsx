@@ -1,7 +1,9 @@
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
 import { RegisterData } from '../types/authTypes'
 import { useNavigate } from 'react-router-dom'
 import { registerUser } from '../services/authService'
+import type { FormProps } from 'antd'
+import { Button, Divider, Form, Input } from 'antd'
 
 export const Register = () => {
   const navigate = useNavigate()
@@ -12,55 +14,78 @@ export const Register = () => {
     password: '',
   })
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
+  const onFinish: FormProps<RegisterData>['onFinish'] = async (values) => {
     try {
-      const res = await registerUser(registerForm)
-      console.log('this is form => ', res.message)
+      console.log('this is form => ', values)
+      const registerData = await registerUser(values)
+      console.log('registerData', registerData)
       navigate('/login')
     } catch (error) {
-      console.error('Login failed:', error)
+      console.error('Register failed:', error)
     }
   }
+  const onFinishFailed: FormProps<RegisterData>['onFinishFailed'] = (
+    errorInfo
+  ) => {
+    console.log('Failed:', errorInfo)
+  }
   return (
-    <div>
-      <h1>Create New Account</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="Username">Username</label>
-        <input
-          type="username"
-          placeholder="Enter your username"
+    <Form
+      name="basic"
+      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 16 }}
+      style={{ maxWidth: 600 }}
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
+      <Form.Item<RegisterData>
+        label="Username"
+        name="username"
+        rules={[{ required: true, message: 'Please input your username!' }]}
+      >
+        <Input
           value={registerForm.username}
           onChange={(e) =>
             setRegisterForm({ ...registerForm, username: e.target.value })
           }
-          name="username"
-          id="username"
         />
-        <label htmlFor="Email">Email</label>
-        <input
-          type="email"
-          placeholder="Enter your email"
+      </Form.Item>
+      <Form.Item<RegisterData>
+        label="Email"
+        name="email"
+        rules={[{ required: true, message: 'Please input your email!' }]}
+      >
+        <Input
           value={registerForm.email}
           onChange={(e) =>
             setRegisterForm({ ...registerForm, email: e.target.value })
           }
-          name="email"
-          id="email"
         />
-        <label htmlFor="Email">Password</label>
-        <input
-          type="password"
-          placeholder="Enter your password"
-          value={registerForm.password}
+      </Form.Item>
+
+      <Form.Item<RegisterData>
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: 'Please input your password!' }]}
+      >
+        <Input.Password
           onChange={(e) =>
             setRegisterForm({ ...registerForm, password: e.target.value })
           }
-          name="password"
-          id="password"
+          value={registerForm.password}
         />
-        <button type="submit">Register</button>
-      </form>
-    </div>
+        <Divider style={{ borderColor: '#7cb305' }}>
+          <a href="/login">Already have account ?</a>
+        </Divider>
+      </Form.Item>
+
+      <Form.Item label={null}>
+        <Button type="primary" htmlType="submit">
+          Register
+        </Button>
+      </Form.Item>
+    </Form>
   )
 }

@@ -15,7 +15,7 @@ export interface RecipeInMealPlan {
 }
 
 export interface MealPlan {
-  userId: string
+  userId: string | null
   week: string
   recipes: RecipeInMealPlan[]
 }

@@ -43,14 +43,11 @@ export const updateFavorite = async (
   }
 }
 
-export const getAllFavorites = async (
-  favariteData: Favorite
-): Promise<{ message: string }> => {
+export const getAllFavorites = async () => {
   try {
     const response = await fetch(API_URL, {
       method: 'GET',
       headers,
-      body: JSON.stringify(favariteData),
     })
     if (!response.ok) {
       throw new Error('Error while getting all favorite')

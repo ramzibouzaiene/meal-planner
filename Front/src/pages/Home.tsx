@@ -1,7 +1,26 @@
+import { Button } from 'antd'
+import Layout from '../Components/Layout/Layout'
+import { useNavigate } from 'react-router-dom'
+
 export const Home = () => {
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken')
+    navigate('/login')
+  }
   return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
+    <Layout>
+      <main>
+        <Button
+          type="primary"
+          style={{ float: 'right' }}
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
+        <h1>Home Page</h1>
+      </main>
+    </Layout>
   )
 }
