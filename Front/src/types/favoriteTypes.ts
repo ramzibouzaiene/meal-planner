@@ -5,7 +5,7 @@ export interface RecipeDetails {
 }
 
 export interface Favorite {
-  userId: string
+  userId: string | null
   recipeId: string
   recipeDetails: RecipeDetails
 }
