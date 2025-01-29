@@ -5,13 +5,14 @@ import authRoutes from './routes/authRoutes.js'
 import favoriteRoutes from './routes/favoriteRoutes.js'
 import mealPlanRoutes from './routes/mealPlanRoutes.js'
 import authMiddleware from './middleware/authMiddleware.js'
+import cors from 'cors'
 
 dotenv.config()
 connectDB()
 
 const app = express()
 app.use(express.json())
-
+app.use(cors())
 const PORT = 5000
 
 app.use('/api/auth', authRoutes)
