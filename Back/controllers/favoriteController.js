@@ -34,7 +34,7 @@ const AddFavorite = (req, res) => {
 
 const UpdateFavorite = async (req, res) => {
   const { id } = req.params
-  const { recipeDetails } = req.body
+  const updateData = req.body.recipeDetails
 
   try {
     const favorite = await Favorite.findById(id)
@@ -42,17 +42,24 @@ const UpdateFavorite = async (req, res) => {
       return res.status(404).json({ message: 'Favorite not found' })
     }
 
-    favorite.recipeDetails = recipeDetails
-    await favorite.save()
+    const updatedFavorite = await Favorite.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          'recipeDetails.title':
+            updateData.title || favorite.recipeDetails.title,
+          'recipeDetails.image':
+            updateData.image || favorite.recipeDetails.image,
+          'recipeDetails.sourceUrl':
+            updateData.sourceUrl || favorite.recipeDetails.sourceUrl,
+        },
+      },
+      { new: true, runValidators: true }
+    )
 
-    return res.status(200).json({
-      message: 'Favorite successfully updated',
-      result: favorite,
-    })
+    res.status(200).json({ favorite: updatedFavorite })
   } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    })
+    res.status(500).json({ message: error.message })
   }
 }
 
@@ -89,4 +96,27 @@ const deleteFavorite = async (req, res) => {
   }
 }
 
-export default { AddFavorite, UpdateFavorite, getAllFavorites, deleteFavorite }
+const getFavoriteById = async (req, res) => {
+  const { id } = req.params
+  try {
+    const favoriteDetails = await Favorite.findById(id)
+    if (!favoriteDetails) {
+      return res.status(404).json({ message: 'Favorite not found' })
+    }
+    return res.status(200).json({
+      favorite: favoriteDetails,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    })
+  }
+}
+
+export default {
+  AddFavorite,
+  UpdateFavorite,
+  getAllFavorites,
+  deleteFavorite,
+  getFavoriteById,
+}

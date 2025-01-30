@@ -18,7 +18,7 @@ export const Login = () => {
       localStorage.setItem('accessToken', loginData.accessToken)
       localStorage.setItem('userId', loginData.userId)
       console.log('loginData', loginData)
-      navigate('/')
+      navigate('/', { replace: true })
     } catch (error) {
       console.error('Login failed:', error)
     }
