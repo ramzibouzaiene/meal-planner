@@ -1,5 +1,5 @@
 import express from 'express'
-import mealPlanController from '../controllers/mealPlanController.js'
+import mealPlanController from '../controllers/MealPlanController'
 const router = express.Router()
 
 router.post('/', mealPlanController.addMeal)

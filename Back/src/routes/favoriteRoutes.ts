@@ -1,6 +1,6 @@
-import express from 'express'
-import favoriteController from '../controllers/favoriteController.js'
-const router = express.Router()
+import express, { Router } from 'express'
+import favoriteController from '../controllers/FavoriteController'
+const router: Router = express.Router()
 
 router.post('/', favoriteController.AddFavorite)
 router.put('/:id', favoriteController.UpdateFavorite)
