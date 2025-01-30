@@ -1,24 +1,27 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import connectDB from './config/database.js'
+import authMiddleware from './middleware/authMiddleware'
 import authRoutes from './routes/authRoutes.js'
 import favoriteRoutes from './routes/favoriteRoutes.js'
-import mealPlanRoutes from './routes/mealPlanRoutes.js'
-import authMiddleware from './middleware/authMiddleware.js'
-import cors from 'cors'
-
-dotenv.config()
-connectDB()
+import mealPlanRoutes from './routes/mealRoutes.js'
 
 const app = express()
-app.use(express.json())
+
+const port = 5000
+
+dotenv.config()
+
+connectDB()
+
 app.use(cors())
-const PORT = 5000
+app.use(express.json())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/favorites', authMiddleware, favoriteRoutes)
 app.use('/api/mealPlans', authMiddleware, mealPlanRoutes)
 
-app.listen(PORT, () => {
-  console.log(`Application is running on port ${PORT}`)
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`)
 })

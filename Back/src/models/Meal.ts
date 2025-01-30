@@ -1,7 +1,11 @@
-import mongoose from 'mongoose'
-import dayEnum from '../enums/DaysOfWeek'
-import mealTypes from '../enums/MealTypes'
-const mealPlanSchema = new mongoose.Schema(
+import mongoose, { Document, Schema } from 'mongoose'
+import { IMealPlan } from '../interfaces/IMealPlan'
+import { DayEnum } from '../enums/DaysOfWeek'
+import { MealType } from '../enums/MealType'
+
+interface MealPlan extends IMealPlan, Document {}
+
+const mealPlanSchema = new Schema<MealPlan>(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -16,12 +20,12 @@ const mealPlanSchema = new mongoose.Schema(
       recipeId: { type: String, required: true },
       day: {
         type: String,
-        enum: dayEnum,
+        enum: DayEnum,
         required: true,
       },
       mealType: {
         type: String,
-        enum: mealTypes,
+        enum: MealType,
         required: true,
       },
       recipeDetails: {
@@ -34,4 +38,4 @@ const mealPlanSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-export default mongoose.model('MealPlan', mealPlanSchema)
+export default mongoose.model<MealPlan>('MealPlan', mealPlanSchema)
