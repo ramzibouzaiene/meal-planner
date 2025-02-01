@@ -1,16 +1,24 @@
 import { v4 as uuidv4 } from 'uuid'
 import Favorite from '../models/Favorite'
 import mongoose from 'mongoose'
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { IFavorite } from '../interfaces/IFavorite'
+import { ValidationError } from '../errors/ValidationError'
+import { ResourceNotFoundError } from '../errors/ResourceNotFoundError'
 
-const AddFavorite = async (req: Request, res: Response): Promise<void> => {
+export const AddFavorite = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { userId, recipeDetails } = req.body
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      res.status(400).json({ message: 'Invalid userId' })
+      throw new ValidationError('User ID is required')
     }
+
+    // TODO Check if the user exists
 
     const recipeId = uuidv4()
 
@@ -27,15 +35,14 @@ const AddFavorite = async (req: Request, res: Response): Promise<void> => {
       data: savedFavorite,
     })
   } catch (error) {
-    res.status(500).json({
-      message: (error as Error).message,
-    })
+    next(error)
   }
 }
 
 export const UpdateFavorite = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   const { id } = req.params
   const updateData = req.body.recipeDetails
@@ -44,33 +51,33 @@ export const UpdateFavorite = async (
     const favorite: IFavorite | null = await Favorite.findById(id)
 
     if (!favorite) {
-      res.status(404).json({ message: 'Favorite not found' })
+      throw new ResourceNotFoundError('Favorite not found')
     }
 
-    const updatedFavorite: IFavorite | null = await Favorite.findByIdAndUpdate(
+    const updatedFavorite = await Favorite.findByIdAndUpdate(
       id,
-      {
-        $set: {
-          'recipeDetails.title':
-            updateData.title || favorite?.recipeDetails.title,
-          'recipeDetails.image':
-            updateData.image || favorite?.recipeDetails.image,
-          'recipeDetails.sourceUrl':
-            updateData.sourceUrl || favorite?.recipeDetails.sourceUrl,
-        },
-      },
+      { $set: updateData },
       { new: true, runValidators: true }
     )
 
-    res.status(200).json({ favorite: updatedFavorite })
-  } catch (error) {
-    res.status(500).json({
-      message: (error as Error).message,
+    if (!updatedFavorite) {
+      throw new ResourceNotFoundError('Favorite update failed')
+    }
+
+    res.status(200).json({
+      message: 'Favorite updated successfully',
+      favorite: updatedFavorite,
     })
+  } catch (error) {
+    next(error)
   }
 }
 
-const getAllFavorites = async (req: Request, res: Response): Promise<void> => {
+export const getAllFavorites = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const favorites: IFavorite[] = await Favorite.find()
 
@@ -79,52 +86,47 @@ const getAllFavorites = async (req: Request, res: Response): Promise<void> => {
       data: favorites,
     })
   } catch (error) {
-    res.status(500).json({
-      message: (error as Error).message,
-    })
+    next(error)
   }
 }
 
-const deleteFavorite = async (req: Request, res: Response): Promise<void> => {
+export const deleteFavorite = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const { id } = req.params
 
   try {
     const favorite: IFavorite | null = await Favorite.findByIdAndDelete(id)
     if (!favorite) {
-      res.status(404).json({ message: 'Favorite not found' })
+      throw new ResourceNotFoundError('Favorite not found')
     }
 
-    res.status(200).json({
+    res.status(203).json({
       message: 'Favorite successfully deleted',
     })
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    })
+    next(error)
   }
 }
 
-const getFavoriteById = async (req: Request, res: Response): Promise<void> => {
+export const getFavoriteById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const { id } = req.params
   try {
     const favoriteDetails: IFavorite | null = await Favorite.findById(id)
     if (!favoriteDetails) {
-      res.status(404).json({ message: 'Favorite not found' })
+      throw new ResourceNotFoundError('Favorite not found')
     }
     res.status(200).json({
+      message: 'Favorite details fetched successfully',
       favorite: favoriteDetails,
     })
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    })
+    next(error)
   }
-}
-
-export default {
-  AddFavorite,
-  UpdateFavorite,
-  getAllFavorites,
-  deleteFavorite,
-  getFavoriteById,
 }
