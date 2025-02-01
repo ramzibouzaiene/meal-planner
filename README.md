@@ -30,8 +30,8 @@ Meal Planner is a full-stack web application that allows users to search for rec
 ### Setup
 #### Clone the repository
 ```sh
-git clone https://github.com/yourusername/recipe-finder-meal-planner.git
-cd recipe-finder-meal-planner
+git clone [https://github.com/yourusername/recipe-finder-meal-planner](https://github.com/ramzibouzaiene/meal-planner/).git
+cd meal-planner
 ```
 
 #### Install dependencies
@@ -56,7 +56,7 @@ JWT_SECRET=your_jwt_secret
 #### Start the application
 ##### Backend
 ```sh
-npm start
+npm run dev
 ```
 ##### Frontend
 ```sh
