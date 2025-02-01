@@ -30,7 +30,7 @@ Meal Planner is a full-stack web application that allows users to search for rec
 ### Setup
 #### Clone the repository
 ```sh
-git clone [https://github.com/yourusername/recipe-finder-meal-planner](https://github.com/ramzibouzaiene/meal-planner/).git
+git clone https://github.com/ramzibouzaiene/meal-planner.git
 cd meal-planner
 ```
 
