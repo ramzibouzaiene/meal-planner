@@ -67,7 +67,7 @@ const login = async (
 
     const isPasswordValid = await bcrypt.compare(
       password,
-      user.password as string
+      user?.password as string
     )
 
     if (!isPasswordValid) {
@@ -91,7 +91,7 @@ const login = async (
     res.status(200).json({
       message: 'Authentication Successful',
       success: true,
-      token: jwtToken,
+      accessToken: jwtToken,
       userId: user?._id,
     })
   } catch (err) {

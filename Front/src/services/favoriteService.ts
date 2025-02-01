@@ -78,7 +78,7 @@ export const deleteFavorite = async (
 
 export const getFavoriteById = async (
   recipeId: string
-): Promise<{ message: string }> => {
+): Promise<{ favorites: Favorite[] }> => {
   try {
     const response = await fetch(`${API_URL}/${recipeId}`, {
       method: 'GET',
