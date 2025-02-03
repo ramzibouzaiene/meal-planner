@@ -15,8 +15,8 @@ const favoriteSchema = new Schema<Favorite>(
     },
     recipeDetails: {
       title: { type: String, required: true },
-      image: { type: String, required: true },
-      sourceUrl: { type: String, required: true },
+      image: { type: String },
+      sourceUrl: { type: String },
     },
   },
   { timestamps: true }
