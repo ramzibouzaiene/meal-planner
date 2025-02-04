@@ -22,8 +22,8 @@ Meal Planner is a full-stack web application that allows users to search for rec
 - **MongoDB & Mongoose** – Database and ORM
 - **JWT (JSON Web Tokens)** – Secure authentication
 - **Bcrypt.js** – Password hashing
-- Swagger – API documentation
-- Winston – Logging middleware
+- **Swagger** – API documentation
+- **Winston** – Logging middleware
 
 ## Installation
 
