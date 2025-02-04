@@ -1,11 +1,9 @@
 import mongoose from 'mongoose'
-
-const MONGO_URI: string =
-  process.env.MONGO_URI || 'mongodb://localhost:27017/mealplanner'
+import { config } from './dotenvConfig'
 
 const connectDB = async (): Promise<void> => {
   try {
-    await mongoose.connect(MONGO_URI)
+    await mongoose.connect(config.mongoURI)
     console.log('✅ Connected to MongoDB successfully')
   } catch (error) {
     console.error('❌ Error connecting to MongoDB:', error.message)

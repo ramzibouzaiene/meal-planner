@@ -1,5 +1,9 @@
 import express, { Router } from 'express'
-import { registerUser, login, getAllUsers } from '../controllers/authController'
+import {
+  RegisterUser,
+  LoginUser,
+  GetAllUsers,
+} from '../controllers/authController'
 const router: Router = express.Router()
 
 /**
@@ -29,7 +33,7 @@ const router: Router = express.Router()
  *       500:
  *         description: Internal server error.
  */
-router.post('/register', registerUser)
+router.post('/register', RegisterUser)
 
 /**
  * @swagger
@@ -51,7 +55,7 @@ router.post('/register', registerUser)
  *       500:
  *         description: Internal server error.
  */
-router.post('/login', login)
+router.post('/login', LoginUser)
 
 /**
  * @swagger
@@ -65,6 +69,6 @@ router.post('/login', login)
  *       500:
  *         description: Internal server error.
  */
-router.get('/getAllUsers', getAllUsers)
+router.get('/getAllUsers', GetAllUsers)
 
 export default router
