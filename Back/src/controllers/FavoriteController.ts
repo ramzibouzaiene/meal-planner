@@ -8,6 +8,16 @@ import { ResourceNotFoundError } from '../errors/ResourceNotFoundError'
 import { logger } from '../config/winston'
 import { CheckUser } from '../utils/checkUser'
 
+/**
+ * @function AddFavorite
+ * @description Adds a new favorite to the database
+ * @param {Request} req - The request object
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {ValidationError} If the user ID is invalid
+ * @throws {ResourceNotFoundError} If the user is not found
+ */
 export const AddFavorite = async (
   req: Request,
   res: Response,
@@ -46,6 +56,15 @@ export const AddFavorite = async (
   }
 }
 
+/**
+ * @function UpdateFavorite
+ * @description Updates an existing favorite in the database
+ * @param {Request} req - The request object
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {ResourceNotFoundError} If the favorite is not found
+ */
 export const UpdateFavorite = async (
   req: Request,
   res: Response,
@@ -83,6 +102,14 @@ export const UpdateFavorite = async (
   }
 }
 
+/**
+ * @function getAllFavorites
+ * @description Fetches all favorites from the database
+ * @param {Request} req - The request object
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ */
 export const getAllFavorites = async (
   req: Request,
   res: Response,
@@ -101,6 +128,15 @@ export const getAllFavorites = async (
   }
 }
 
+/**
+ * @function deleteFavorite
+ * @description Deletes a specific favorite by ID
+ * @param {Request} req - The request object
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {ResourceNotFoundError} If the favorite is not found
+ */
 export const deleteFavorite = async (
   req: Request,
   res: Response,
@@ -124,6 +160,15 @@ export const deleteFavorite = async (
   }
 }
 
+/**
+ * @function getFavoriteById
+ * @description Fetches a specific favorite by ID
+ * @param {Request} req - The request object
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {ResourceNotFoundError} If the favorite is not found
+ */
 export const getFavoriteById = async (
   req: Request,
   res: Response,
