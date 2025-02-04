@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { logger } from '../config/winston'
+import { config } from '../config/dotenvConfig'
 
 interface JwtPayload {
   userId: string
@@ -21,10 +22,7 @@ export const verifyToken = (
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as JwtPayload
+    const decoded = jwt.verify(token, config.jwtSecret) as JwtPayload
     req.user = decoded
     next()
   } catch (error) {

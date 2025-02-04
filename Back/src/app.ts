@@ -1,19 +1,17 @@
 import express, { NextFunction, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import connectDB from './config/database.js'
+import connectDB from './config/database'
 import { verifyToken } from './middleware/authMiddleware'
-import authRoutes from './routes/authRoutes.js'
-import favoriteRoutes from './routes/favoriteRoutes.js'
-import mealPlanRoutes from './routes/mealRoutes.js'
-import { globalErrorHandler } from './middleware/globalErrorHandler.js'
-import { logger } from './config/winston.js'
-import { specs } from './config/swagger.js'
+import MealRoutes from './routes/mealRoutes'
+import AuthRoutes from './routes/authRoutes'
+import FavoriteRoutes from './routes/favoriteRoutes'
+import { globalErrorHandler } from './middleware/globalErrorHandler'
+import { logger } from './config/winston'
+import { specs } from './config/swagger'
 import swaggerUi from 'swagger-ui-express'
 
 const app = express()
-
-const port = 5000
 
 dotenv.config()
 
@@ -35,12 +33,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next()
 })
 // Public Controllers Routes
-app.use('/api/auth', authRoutes)
+app.use('/api/auth', AuthRoutes)
 app.use(verifyToken)
 
 // Private Controllers Routes
-app.use('/api/favorites', favoriteRoutes)
-app.use('/api/mealPlans', mealPlanRoutes)
+app.use('/api/favorites', FavoriteRoutes)
+app.use('/api/mealPlans', MealRoutes)
 
 // Global Error Handler Middleware
 app.use(globalErrorHandler)
@@ -51,6 +49,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send('Internal Server Error')
 })
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`)
-})
+export default app

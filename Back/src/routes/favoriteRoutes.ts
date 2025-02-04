@@ -1,10 +1,10 @@
 import express, { Router } from 'express'
 import {
   AddFavorite,
+  DeleteFavorite,
+  GetAllFavorites,
+  GetFavoriteById,
   UpdateFavorite,
-  getAllFavorites,
-  deleteFavorite,
-  getFavoriteById,
 } from '../controllers/FavoriteController'
 const router: Router = express.Router()
 
@@ -76,7 +76,7 @@ router.put('/:id', UpdateFavorite)
  *       400:
  *         description: Bad Request
  */
-router.get('/', getAllFavorites)
+router.get('/', GetAllFavorites)
 
 /**
  * @swagger
@@ -96,7 +96,7 @@ router.get('/', getAllFavorites)
  *       404:
  *         description: Favorite not found
  */
-router.delete('/:id', deleteFavorite)
+router.delete('/:id', DeleteFavorite)
 
 /**
  * @swagger
@@ -116,6 +116,6 @@ router.delete('/:id', deleteFavorite)
  *       404:
  *         description: Favorite not found
  */
-router.get('/:id', getFavoriteById)
+router.get('/:id', GetFavoriteById)
 
 export default router

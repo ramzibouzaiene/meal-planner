@@ -1,9 +1,9 @@
 import express from 'express'
 import {
-  addMeal,
-  updateMeal,
-  getAllMeals,
-  deleteMeal,
+  AddMeal,
+  UpdateMeal,
+  GetAllMeals,
+  DeleteMeal,
 } from '../controllers/MealPlanController'
 const router = express.Router()
 
@@ -33,7 +33,7 @@ const router = express.Router()
  *       400:
  *         description: Bad Request
  */
-router.post('/', addMeal)
+router.post('/', AddMeal)
 
 /**
  * @swagger
@@ -70,7 +70,7 @@ router.post('/', addMeal)
  *       404:
  *         description: Meal not found
  */
-router.put('/:id', updateMeal)
+router.put('/:id', UpdateMeal)
 
 /**
  * @swagger
@@ -83,7 +83,7 @@ router.put('/:id', updateMeal)
  *       400:
  *         description: Bad Request
  */
-router.get('/', getAllMeals)
+router.get('/', GetAllMeals)
 
 /**
  * @swagger
@@ -103,6 +103,6 @@ router.get('/', getAllMeals)
  *       404:
  *         description: Meal not found
  */
-router.delete('/:id', deleteMeal)
+router.delete('/:id', DeleteMeal)
 
 export default router

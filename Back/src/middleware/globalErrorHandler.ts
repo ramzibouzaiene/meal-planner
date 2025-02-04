@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { AppError } from '../errors/AppError'
+import { config } from '../config/dotenvConfig'
 
 export const globalErrorHandler = (
   err: AppError,
@@ -15,6 +16,6 @@ export const globalErrorHandler = (
   res.status(statusCode).json({
     status: 'error',
     message: message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(config.nodeEnv === 'development' && { stack: err.stack }),
   })
 }
