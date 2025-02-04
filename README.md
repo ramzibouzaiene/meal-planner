@@ -8,6 +8,8 @@ Meal Planner is a full-stack web application that allows users to search for rec
 - 📅 **Meal Planning**: Add recipes to meal plans for different days of the week.
 - ✅ **Authentication**: Secure login and registration system.
 - 🔒 **Protected Routes**: Certain features require authentication.
+- 📄 Swagger API Documentation: Easily explore API endpoints.
+- 📜 Winston Logging: Centralized logging for debugging and monitoring.
 
 ## Tech Stack
 ### Frontend:
@@ -20,6 +22,8 @@ Meal Planner is a full-stack web application that allows users to search for rec
 - **MongoDB & Mongoose** – Database and ORM
 - **JWT (JSON Web Tokens)** – Secure authentication
 - **Bcrypt.js** – Password hashing
+- Swagger – API documentation
+- Winston – Logging middleware
 
 ## Installation
 
@@ -79,6 +83,12 @@ npm run dev
 - `GET /api/mealPlans` - Get all meal plans
 - `PUT /api/mealPlans/:id` - Update meal plan
 - `DELETE /api/mealPlans/:id` - Delete meal plan
+  
+### API Documentation (Swagger)
+The API documentation is available via Swagger. To access it, start the backend and visit:
+```sh
+http://localhost:5000/api-docs
+```
 
 ## Protected Routes
 Some routes require authentication using JWT tokens. The frontend handles this with a protected route component.
