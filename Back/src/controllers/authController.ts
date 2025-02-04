@@ -7,6 +7,7 @@ import User from '../models/User'
 import { IUser } from '../interfaces/IUser'
 import { ValidationError } from '../errors/ValidationError'
 import { UnauthorizedError } from '../errors/UnauthorizedError'
+import { logger } from '../config/winston'
 
 export const registerUser = async (
   req: Request<object, object, RegisterData>,
@@ -19,6 +20,7 @@ export const registerUser = async (
     const existingUser = await User.findOne({ email })
 
     if (existingUser) {
+      logger.error('Email already used')
       throw new ValidationError('Email already used')
     } else {
       const userId = uuidv4()
@@ -40,6 +42,7 @@ export const registerUser = async (
         success: true,
         result: savedUser,
       })
+      logger.info('User successfully created')
     }
   } catch (error) {
     next(error)
@@ -57,6 +60,7 @@ export const login = async (
     const user: IUser | null = await User.findOne({ email })
 
     if (!user) {
+      logger.error('User not found')
       throw new UnauthorizedError('Authentication Failed: User not found')
     }
 
@@ -66,6 +70,7 @@ export const login = async (
     )
 
     if (!isPasswordValid) {
+      logger.error('Invalid user credentials')
       throw new ValidationError('Authentication Failed: Invalid credentials')
     }
 
@@ -86,6 +91,7 @@ export const login = async (
       accessToken: jwtToken,
       userId: user?._id,
     })
+    logger.info('User Authenticated successfully')
   } catch (error) {
     next(error)
   }
@@ -103,6 +109,7 @@ export const getAllUsers = async (
       success: true,
       message: 'users list',
     })
+    logger.info('Users list fetched successfully')
   } catch (error) {
     next(error)
   }
