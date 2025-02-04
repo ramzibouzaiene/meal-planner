@@ -1,14 +1,17 @@
 import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { LoginData, RegisterData } from '../interfaces/Auth'
 import User from '../models/User'
 import { IUser } from '../interfaces/IUser'
+import { ValidationError } from '../errors/ValidationError'
+import { UnauthorizedError } from '../errors/UnauthorizedError'
 
-const registerUser = async (
+export const registerUser = async (
   req: Request<object, object, RegisterData>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   const { username, email, password } = req.body
 
@@ -16,10 +19,7 @@ const registerUser = async (
     const existingUser = await User.findOne({ email })
 
     if (existingUser) {
-      res.status(403).json({
-        message: 'Email already used',
-        success: false,
-      })
+      throw new ValidationError('Email already used')
     } else {
       const userId = uuidv4()
       const hash = await bcrypt.hash(password, 10)
@@ -42,16 +42,14 @@ const registerUser = async (
       })
     }
   } catch (error) {
-    res.status(500).json({
-      message: (error as Error).message,
-      success: false,
-    })
+    next(error)
   }
 }
 
-const login = async (
+export const login = async (
   req: Request<object, object, LoginData>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   const { email, password } = req.body
 
@@ -59,10 +57,7 @@ const login = async (
     const user: IUser | null = await User.findOne({ email })
 
     if (!user) {
-      res.status(401).json({
-        message: 'Authentication Failed: User not found',
-        success: false,
-      })
+      throw new UnauthorizedError('Authentication Failed: User not found')
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -71,10 +66,7 @@ const login = async (
     )
 
     if (!isPasswordValid) {
-      res.status(401).json({
-        message: 'Authentication Failed: Invalid credentials',
-        success: false,
-      })
+      throw new ValidationError('Authentication Failed: Invalid credentials')
     }
 
     const jwtToken = jwt.sign(
@@ -94,15 +86,16 @@ const login = async (
       accessToken: jwtToken,
       userId: user?._id,
     })
-  } catch (err) {
-    res.status(500).json({
-      message: `An error occurred: ${err.message}`,
-      success: false,
-    })
+  } catch (error) {
+    next(error)
   }
 }
 
-const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const users = await User.find()
     res.status(200).json({
@@ -111,11 +104,6 @@ const getAllUsers = async (req: Request, res: Response): Promise<void> => {
       message: 'users list',
     })
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error.message,
-    })
+    next(error)
   }
 }
-
-export default { registerUser, login, getAllUsers }
