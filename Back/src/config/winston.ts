@@ -2,7 +2,7 @@ import winston from 'winston'
 import DailyRotateFile from 'winston-daily-rotate-file'
 
 export const logger = winston.createLogger({
-  levels: { info: 2, http: 3 },
+  levels: { error: 0, info: 2, http: 3 },
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
@@ -13,7 +13,7 @@ export const logger = winston.createLogger({
     new DailyRotateFile({
       filename: 'app-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
-      zippedArchive: true, // compresses older log files
+      zippedArchive: true,
       maxSize: '20m',
       maxFiles: '14d',
     }),

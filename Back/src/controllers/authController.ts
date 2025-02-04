@@ -9,6 +9,15 @@ import { ValidationError } from '../errors/ValidationError'
 import { UnauthorizedError } from '../errors/UnauthorizedError'
 import { logger } from '../config/winston'
 
+/**
+ * @function registerUser
+ * @description Registers a new user by validating email, hashing the password, and saving the user in the database
+ * @param {Request} req - The request object containing user data
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {ValidationError} If the email is already in use
+ */
 export const registerUser = async (
   req: Request<object, object, RegisterData>,
   res: Response,
@@ -49,6 +58,16 @@ export const registerUser = async (
   }
 }
 
+/**
+ * @function login
+ * @description Authenticates a user by comparing credentials and returning a JWT token if valid
+ * @param {Request} req - The request object containing user credentials
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {UnauthorizedError} If the user is not found or credentials are invalid
+ * @throws {ValidationError} If the authentication credentials are invalid
+ */
 export const login = async (
   req: Request<object, object, LoginData>,
   res: Response,
@@ -97,6 +116,14 @@ export const login = async (
   }
 }
 
+/**
+ * @function getAllUsers
+ * @description Fetches all users from the database
+ * @param {Request} req - The request object
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ */
 export const getAllUsers = async (
   req: Request,
   res: Response,

@@ -7,6 +7,16 @@ import { ResourceNotFoundError } from '../errors/ResourceNotFoundError'
 import { logger } from '../config/winston'
 import { CheckUser } from '../utils/checkUser'
 
+/**
+ * @function addMeal
+ * @description Adds a new meal plan by validating the user, checking if the user exists, and then saving the meal plan
+ * @param {Request} req - The request object containing userId, week, and recipes
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {ValidationError} If the user ID is invalid
+ * @throws {ResourceNotFoundError} If the user is not found
+ */
 export const addMeal = async (
   req: Request,
   res: Response,
@@ -40,6 +50,16 @@ export const addMeal = async (
   }
 }
 
+/**
+ * @function updateMeal
+ * @description Updates an existing meal plan by ID and validates the user before saving the changes
+ * @param {Request} req - The request object containing meal plan ID, userId, week, and recipes
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {ValidationError} If the user ID is invalid
+ * @throws {ResourceNotFoundError} If the user or meal plan is not found
+ */
 export const updateMeal = async (
   req: Request,
   res: Response,
@@ -78,6 +98,14 @@ export const updateMeal = async (
   }
 }
 
+/**
+ * @function getAllMeals
+ * @description Retrieves all meal plans from the database
+ * @param {Request} req - The request object
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ */
 export const getAllMeals = async (
   req: Request,
   res: Response,
@@ -95,6 +123,16 @@ export const getAllMeals = async (
     next(error)
   }
 }
+
+/**
+ * @function deleteMeal
+ * @description Deletes a meal plan by ID from the database
+ * @param {Request} req - The request object containing the meal plan ID
+ * @param {Response} res - The response object
+ * @param {NextFunction} next - The next middleware function
+ * @returns {Promise<void>} - A promise indicating the completion of the operation
+ * @throws {ResourceNotFoundError} If the meal plan is not found
+ */
 export const deleteMeal = async (
   req: Request,
   res: Response,
