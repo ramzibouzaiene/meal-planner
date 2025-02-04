@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
+import { logger } from '../config/winston'
 
 interface JwtPayload {
   userId: string
@@ -14,6 +15,7 @@ export const verifyToken = (
   const token = req.headers['authorization']?.split(' ')[1]
 
   if (!token) {
+    logger.error('No token provided')
     res.status(401).json({ message: 'No token provided, authorization denied' })
     return
   }
@@ -26,6 +28,7 @@ export const verifyToken = (
     req.user = decoded
     next()
   } catch (error) {
+    logger.error('Invalid token from middleware')
     res.status(400).json({ message: 'Invalid token : ', error })
   }
 }
