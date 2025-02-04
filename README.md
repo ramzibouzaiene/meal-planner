@@ -8,8 +8,8 @@ Meal Planner is a full-stack web application that allows users to search for rec
 - 📅 **Meal Planning**: Add recipes to meal plans for different days of the week.
 - ✅ **Authentication**: Secure login and registration system.
 - 🔒 **Protected Routes**: Certain features require authentication.
-- 📄 **Swagger API Documentation: Easily explore API endpoints.
-- 📜 **Winston Logging: Centralized logging for debugging and monitoring.
+- 📄 **Swagger API Documentation**: Easily explore API endpoints.
+- 📜 **Winston Logging**: Centralized logging for debugging and monitoring.
 
 ## Tech Stack
 ### Frontend:
