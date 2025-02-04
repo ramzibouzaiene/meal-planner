@@ -15,7 +15,7 @@ export const AddFavorite = async (
     const { userId, recipeDetails } = req.body
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      throw new ValidationError('User ID is required')
+      throw new ValidationError('Invalid User ID')
     }
 
     // TODO Check if the user exists
@@ -32,7 +32,7 @@ export const AddFavorite = async (
 
     res.status(201).json({
       message: 'Favorite successfully created',
-      data: savedFavorite,
+      favorite: savedFavorite,
     })
   } catch (error) {
     next(error)
@@ -83,7 +83,7 @@ export const getAllFavorites = async (
 
     res.status(200).json({
       message: 'Favorites fetched successfully',
-      data: favorites,
+      favorite: favorites,
     })
   } catch (error) {
     next(error)

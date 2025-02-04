@@ -1,14 +1,20 @@
 import mongoose from 'mongoose'
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import Meal from '../models/Meal'
 import { IMealPlan } from '../interfaces/IMealPlan'
+import { ValidationError } from '../errors/ValidationError'
+import { ResourceNotFoundError } from '../errors/ResourceNotFoundError'
 
-const addMeal = async (req: Request, res: Response): Promise<void> => {
+export const addMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { userId, week, recipes } = req.body
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      res.status(400).json({ message: 'Invalid userId' })
+      throw new ValidationError('Invalid User ID')
     }
 
     const newMeal = new Meal({
@@ -19,28 +25,29 @@ const addMeal = async (req: Request, res: Response): Promise<void> => {
     const savedMeal: IMealPlan = await newMeal.save()
     res.status(200).json({
       message: 'Meal Plan successfully created',
-      data: savedMeal,
+      favorite: savedMeal,
     })
   } catch (error) {
-    res.status(200).json({
-      message: (error as Error).message,
-      status: res.status(500),
-    })
+    next(error)
   }
 }
 
-const updateMeal = async (req: Request, res: Response): Promise<void> => {
+export const updateMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { id } = req.params
     const { userId, week, recipes } = req.body
 
     const mealPlan = await Meal.findById(id)
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      res.status(400).json({ message: 'Invalid userId' })
+      throw new ValidationError('Invalid User ID')
     }
 
     if (!mealPlan) {
-      res.status(404).json({ message: 'Meal Plan not found' })
+      throw new ResourceNotFoundError('Meal Plan not found')
     }
     mealPlan.week = week
     mealPlan.recipes = recipes
@@ -49,45 +56,46 @@ const updateMeal = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       message: 'Meal Plan successfully updated',
-      data: updatedMeal,
+      favorite: updatedMeal,
     })
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    })
+    next(error)
   }
 }
 
-const getAllMeals = async (req: Request, res: Response): Promise<void> => {
+export const getAllMeals = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const mealPlans = await Meal.find()
 
     res.status(200).json({
       message: 'Meal Plans fetched successfully',
-      data: mealPlans,
+      favorite: mealPlans,
     })
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    })
+    next(error)
   }
 }
-const deleteMeal = async (req: Request, res: Response): Promise<void> => {
+export const deleteMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { id } = req.params
     const mealPlan = await Meal.findByIdAndDelete(id)
     if (!mealPlan) {
-      res.status(404).json({ message: 'Meal Plan not found' })
+      throw new ResourceNotFoundError('Meal Plan not found')
     }
 
-    res.status(200).json({
+    res.status(203).json({
       message: 'Meal Plan successfully deleted',
+      favorite: [],
     })
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    })
+    next(error)
   }
 }
-
-export default { addMeal, updateMeal, getAllMeals, deleteMeal }
