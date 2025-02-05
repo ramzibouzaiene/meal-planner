@@ -3,6 +3,7 @@ import {
   RegisterUser,
   LoginUser,
   GetAllUsers,
+  Logout,
 } from '../controllers/authController'
 const router: Router = express.Router()
 
@@ -70,5 +71,7 @@ router.post('/login', LoginUser)
  *         description: Internal server error.
  */
 router.get('/getAllUsers', GetAllUsers)
+
+router.post('/logout', Logout)
 
 export default router

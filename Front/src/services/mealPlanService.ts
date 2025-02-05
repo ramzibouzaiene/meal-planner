@@ -2,18 +2,16 @@ import { MealPlan } from '../types/mealPlanTypes'
 
 const API_URL = 'http://localhost:5000/api/mealPlans'
 
-const headers = {
-  'Content-Type': 'application/json',
-  Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-}
-
 export const addMealPlan = async (
   mealPlanData: MealPlan
 ): Promise<{ message: string }> => {
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
-      headers,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(mealPlanData),
     })
     if (!response.ok) {
@@ -35,7 +33,10 @@ export const updateMealPlan = async (
       `${API_URL}/${mealPlanData.recipes[0]?.recipeId}`,
       {
         method: 'PUT',
-        headers,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(mealPlanData),
       }
     )
@@ -54,7 +55,10 @@ export const getAllMealPlans = async (): Promise<MealPlan[]> => {
   try {
     const response = await fetch(API_URL, {
       method: 'GET',
-      headers,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
     if (!response.ok) {
       throw new Error(
@@ -73,7 +77,10 @@ export const deleteMealPlan = async (
   try {
     const response = await fetch(`${API_URL}/${recipeId}`, {
       method: 'DELETE',
-      headers,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
     if (!response.ok) {
       throw new Error(

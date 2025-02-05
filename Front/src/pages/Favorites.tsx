@@ -106,28 +106,35 @@ export const Favorites = () => {
   const handleSubmit = async () => {
     const userId = localStorage.getItem('userId')
     const updatedValues = { ...formData, userId }
-
     try {
       const response = await addFavorite(updatedValues)
 
       if (response?.message) {
         message.success('Favorite added successfully.')
-        fetchFavorites()
-        clodeModal()
+        setFormData({
+          userId: '',
+          recipeId: '',
+          recipeDetails: {
+            title: '',
+            image: '',
+            sourceUrl: '',
+          },
+        })
+        await fetchFavorites()
+        closeModal()
       } else {
         message.error('An error occurred while submitting the form.')
       }
     } catch (error) {
-      message.error('An error occurred while submitting the form.')
-      console.error('Error:', error)
+      message.error('An error occurred while submitting the form.', error)
     }
   }
 
   const fetchFavorites = async () => {
     const response = await getAllFavorites()
-    console.log('fav res', response.data)
+    console.log('fav res', response.favorite)
 
-    const formattedData = response.data
+    const formattedData = response.favorite
       .map((res: Favorite) => {
         const recipes = Array.isArray(res.recipeDetails)
           ? res.recipeDetails
@@ -142,18 +149,6 @@ export const Favorites = () => {
 
     setFavoriteData(formattedData)
   }
-
-  const getFavoriteDetails = async () => {
-    try {
-      const response = await getFavoriteById(favoriteId)
-      console.log('getFavoriteById', response.favorite)
-
-      setFavoriteDetails(response.favorite)
-    } catch (error) {
-      console.error('Error fetching favorite details:', error)
-    }
-  }
-
   const handleDelete = async () => {
     try {
       console.log('handleDelete id:', favoriteId)
@@ -161,7 +156,7 @@ export const Favorites = () => {
       if (response?.message) {
         clodeDeleteModal()
         message.success('Favorite deleted successfully.')
-        window.location.reload()
+        await fetchFavorites()
       } else {
         message.error('An error occurred while deleting favorite')
       }
@@ -182,7 +177,7 @@ export const Favorites = () => {
       if (response?.message) {
         clodeUpdateModal()
         message.success('Favorite updated successfully.')
-        window.location.reload()
+        await fetchFavorites()
       } else {
         message.error('An error occurred while updating favorite')
       }
@@ -195,7 +190,7 @@ export const Favorites = () => {
     setOpen(true)
   }
 
-  const clodeModal = () => {
+  const closeModal = () => {
     setOpen(false)
   }
 
@@ -213,17 +208,20 @@ export const Favorites = () => {
     setOpenUpdateModal(false)
   }
 
-  const showUpdateModal = (id: string) => {
-    getFavoriteDetails()
-    setOpenUpdateModal(true)
+  const showUpdateModal = async (id: string) => {
     setFavoriteId(id)
-    console.log('showUpdateModal id:', id)
+    setOpenUpdateModal(true)
+    try {
+      const response = await getFavoriteById(id)
+      setFavoriteDetails(response.favorite)
+    } catch (error) {
+      console.error('Error fetching favorite details:', error)
+    }
   }
 
   useEffect(() => {
     fetchFavorites()
-    getFavoriteDetails()
-  }, [favoriteId])
+  }, [])
 
   return (
     <Layout>
@@ -280,7 +278,7 @@ export const Favorites = () => {
       <CustomModal
         title="Add Favorite"
         openModal={open}
-        handleModal={clodeModal}
+        handleModal={closeModal}
         handleOk={handleSubmit}
       >
         <Form>

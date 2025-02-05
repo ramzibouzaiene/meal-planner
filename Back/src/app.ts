@@ -10,6 +10,7 @@ import { globalErrorHandler } from './middleware/globalErrorHandler'
 import { logger } from './config/winston'
 import { specs } from './config/swagger'
 import swaggerUi from 'swagger-ui-express'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -17,9 +18,14 @@ dotenv.config()
 
 connectDB()
 
-app.use(cors())
 app.use(express.json())
-
+app.use(cookieParser())
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+)
 // Serve Swagger API documentation
 app.use(
   '/api-docs',
