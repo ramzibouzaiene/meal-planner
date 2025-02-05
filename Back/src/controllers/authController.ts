@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { LoginData, RegisterData } from '../interfaces/Auth'
 import * as authService from '../services/AuthService'
+import { config } from '../config/dotenvConfig'
 
 /**
  * Registers a new user by calling the service
@@ -42,12 +43,20 @@ export const LoginUser = async (
   const { email, password } = req.body
 
   try {
-    const jwtToken = await authService.LoginUser(email, password)
+    const { accessToken, userId } = await authService.LoginUser(email, password)
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: config.nodeEnv === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000,
+      path: '/',
+    })
 
     res.status(200).json({
       message: 'Authentication Successful',
       success: true,
-      accessToken: jwtToken,
+      userId,
     })
   } catch (error) {
     next(error)
@@ -73,6 +82,19 @@ export const GetAllUsers = async (
       success: true,
       message: 'Users list fetched successfully',
     })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const Logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    res.clearCookie('accessToken', { path: '/' })
+    res.status(200).json({ message: 'Logged out successfully' })
   } catch (error) {
     next(error)
   }

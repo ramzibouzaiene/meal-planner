@@ -1,4 +1,3 @@
-// userService.ts
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
@@ -8,6 +7,10 @@ import User from '../models/User'
 import { ValidationError } from '../errors/ValidationError'
 import { logger } from '../config/winston'
 import { UnauthorizedError } from '../errors/UnauthorizedError'
+
+const generateAccessToken = (userId: string | unknown) => {
+  return jwt.sign({ userId }, config.jwtSecret, { expiresIn: '15m' })
+}
 
 /**
  * Registers a new user by validating email, hashing the password, and saving the user in the database
@@ -51,15 +54,18 @@ export const RegisterUser = async (
  * Authenticates a user by comparing credentials and returning a JWT token if valid
  * @param email - The email of the user
  * @param password - The password of the user
- * @returns {Promise<string>} - The generated JWT token
+ * @returns {Promise<{ jwtToken: string, userId: string }>} - The generated JWT token and user ID
  * @throws {UnauthorizedError} If the user is not found or credentials are invalid
  * @throws {ValidationError} If the authentication credentials are invalid
  */
 export const LoginUser = async (
   email: string,
   password: string
-): Promise<string> => {
-  const user: IUser | null = await User.findOne({ email })
+): Promise<{
+  accessToken: string
+  userId: string | unknown
+}> => {
+  const user: IUser | null = await User.findOne({ email }).select('+password')
 
   if (!user) {
     logger.error('User not found')
@@ -73,19 +79,13 @@ export const LoginUser = async (
     throw new ValidationError('Authentication Failed: Invalid credentials')
   }
 
-  const jwtToken = jwt.sign(
-    {
-      email: user.email,
-      userId: user._id,
-    },
-    config.jwtSecret,
-    {
-      expiresIn: '1h',
-    }
-  )
+  const accessToken = generateAccessToken(user._id)
 
   logger.info('User authenticated successfully')
-  return jwtToken
+  return {
+    accessToken: accessToken,
+    userId: user._id,
+  }
 }
 
 /**

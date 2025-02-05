@@ -2,18 +2,16 @@ import { Favorite } from '../types/favoriteTypes'
 
 const API_URL = 'http://localhost:5000/api/favorites'
 
-const headers = {
-  'Content-Type': 'application/json',
-  Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-}
-
 export const addFavorite = async (
   favariteData: Favorite
 ): Promise<{ message: string }> => {
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
-      headers,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(favariteData),
     })
     if (!response.ok) {
@@ -32,7 +30,10 @@ export const updateFavorite = async (
     console.log('service favariteData', favariteData)
     const response = await fetch(`${API_URL}/${favariteData._id}`, {
       method: 'PUT',
-      headers,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(favariteData),
     })
     if (!response.ok) {
@@ -48,7 +49,10 @@ export const getAllFavorites = async () => {
   try {
     const response = await fetch(API_URL, {
       method: 'GET',
-      headers,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
     if (!response.ok) {
       throw new Error('Error while getting all favorite')
@@ -65,7 +69,10 @@ export const deleteFavorite = async (
   try {
     const response = await fetch(`${API_URL}/${recipeId}`, {
       method: 'DELETE',
-      headers,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
     if (!response.ok) {
       throw new Error('Error while deleting favorite')
@@ -82,7 +89,10 @@ export const getFavoriteById = async (
   try {
     const response = await fetch(`${API_URL}/${recipeId}`, {
       method: 'GET',
-      headers,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
     if (!response.ok) {
       throw new Error('Error while getting favorite details ')

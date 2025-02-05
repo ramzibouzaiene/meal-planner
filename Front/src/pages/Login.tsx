@@ -15,7 +15,6 @@ export const Login = () => {
     try {
       console.log('this is form => ', values)
       const loginData = await loginUser(values)
-      localStorage.setItem('accessToken', loginData.accessToken)
       localStorage.setItem('userId', loginData.userId)
       console.log('loginData', loginData)
       navigate('/', { replace: true })
