@@ -1,4 +1,4 @@
-# Meal Planner
+# Meal Planner ( In Progress )
 
 ## Overview
 Meal Planner is a full-stack web application that allows users to search for recipes, plan their meals, and manage their dietary preferences efficiently.
